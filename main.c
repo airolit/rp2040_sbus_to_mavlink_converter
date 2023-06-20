@@ -94,14 +94,8 @@ int main()
     {
         if (board_millis() - last_timestamp > 20)
         {
-            // Print the channels
-            /* for (uint32_t i = 0; i < 16; i++)
-            {
-                printf("%d ", channels[i]);
-            }
-            printf("\n");
 
- */            int16_t throttle = channels[2];
+            int16_t throttle = channels[2];
             int16_t yaw = channels[3];
             int16_t pitch = channels[1];
             int16_t roll = channels[0];
@@ -111,14 +105,13 @@ int main()
             int16_t min = 364;
 
             // Normalize throttle to a value between -1000 and 1000
-            int16_t throttle_normalized = 500-((throttle - mid) * 1000 / (max - min));
+            int16_t throttle_normalized = 500 - ((throttle - mid) * 1000 / (max - min));
             int16_t yaw_normalized = 2 * ((yaw - mid) * 1000 / (max - min));
             int16_t pitch_normalized = -2 * ((pitch - mid) * 1000 / (max - min));
             int16_t roll_normalized = 2 * ((roll - mid) * 1000 / (max - min));
 
             mavlink_message_t msg;
             mavlink_msg_manual_control_pack(1, 200, &msg, 0, pitch_normalized, roll_normalized, throttle_normalized, yaw_normalized, 0, 0, 0, 0, 0);
-            // mavlink_msg_rc_channels_raw_pack(1, 200, &msg, 0, 0, channels[0], channels[1], channels[2], channels[3], channels[4], channels[5], channels[6], channels[7], channels[8]);
 
             static uint8_t mavlink_buffer[MAVLINK_MAX_PACKET_LEN] = {0};
             uint16_t len = mavlink_msg_to_send_buffer(mavlink_buffer, &msg);
